@@ -1,0 +1,63 @@
+0 0 45 225 255 Water
+100 10 148 28 255 Forest
+101 17 94 78 255 Forest - Boreal
+102 7 161 135 255 Forest - Subarctic
+103 0 250 192 255 Forest - Subantarctic
+104 39 161 112 255 Forest - Temperate
+105 157 249 65 255 Forest - Subtropical-tropical dry
+106 42 244 52 255 Forest - Subtropical-tropical moist lowland
+107 160 254 204 255 Forest - Subtropical-tropical mangrove vegetation
+108 103 126 45 255 Forest - Subtropical-tropical swamp
+109 0 196 16 255 Forest - Subtropical-tropical moist montane
+200 198 255 83 255 Savanna
+201 245 233 54 255 Savanna - Dry
+202 205 255 39 255 Savanna - Moist
+300 234 160 63 255 Shrubland
+301 100 88 0 255 Shrubland - Subarctic
+302 123 122 96 255 Shrubland - Subantarctic
+303 132 167 155 255 Shrubland - Boreal
+304 154 221 212 255 Shrubland - Temperate
+305 255 233 123 255 Shrubland - Subtropical-tropical dry
+306 240 166 37 255 Shrubland - Subtropical-tropical moist
+307 206 155 194 255 Shrubland - Subtropical-tropical high altitude
+308 127 29 213 255 Shrubland - Mediterranean-type
+400 152 250 231 255 Grassland
+401 189 238 216 255 Grassland - Tundra
+402 173 196 192 255 Grassland - Subarctic
+403 38 71 88 255 Grassland - Subantarctic
+404 51 185 136 255 Grassland - Temperate
+405 255 245 203 255 Grassland - Subtropical-tropical dry
+406 137 232 240 255 Grassland - Subtropical-tropical seasonally wet or flooded
+407 250 203 255 255 Grassland - Subtropical-tropical high altitude
+500 91 181 255 255 Wetlands (inland)
+501 0 250 250 255 Wetlands (inland) - Permanent rivers streams creeks
+502 214 160 249 255 Wetlands (inland) - Seasonal/intermittent/irregular rivers/streams/creeks
+503 191 42 232 255 Wetlands (inland) - Shrub dominated wetlands
+504 49 72 114 255 Wetlands (inland) - Bogs/marshes/swamps/fens/peatlands
+505 14 119 217 255 Wetlands (inland) - Permanent freshwater lakes
+506 110 150 196 255 Wetlands (inland) - Seasonal/intermittent freshwater lakes (over 8 ha)
+507 0 173 216 255 Wetlands (inland) - Permanent freshwater marshes/pools (under 8 ha)
+508 33 142 214 255 Wetlands (inland) - Seasonal/intermittent freshwater marshes/pools (under 8 ha)
+509 48 31 153 255 Wetlands (inland) - Freshwater springs and oases
+510 161 230 236 255 Wetlands (inland) - Tundra wetlands
+511 199 225 228 255 Wetlands (inland) - Alpine wetlands
+512 249 233 212 255 Wetlands (inland) - Geothermal wetlands
+513 0 37 252 255 Wetlands (inland) - Permanent inland deltas
+514 22 107 149 255 Wetlands (inland) - Permanent saline brackish or alkaline lakes
+515 70 164 192 255 Wetlands (inland) - Seasonal/intermittent saline brackish or alkaline lakes and flats
+516 62 113 224 255 Wetlands (inland) - Permanent /saline / brackish or alkaline marshes/pools
+517 156 117 208 255 Wetlands (inland) - Seasonal/intermittent /saline / brackish or alkaline marshes/pools
+518 255 1 188 255 Wetlands (inland) / Karst and other subterranean hydrological systems
+600 165 146 131 255 Rocky Areas
+800 255 252 225 255 Desert
+801 255 183 1 255 Desert - Hot
+802 228 233 212 255 Desert - Temperate
+803 218 237 245 255 Desert - Cold
+1400 217 80 73 255 Artificial - Terrestrial
+1401 255 160 131 255 Arable land
+1402 255 131 202 255 Pastureland
+1403 255 8 0 255 Plantations
+1404 221 203 37 255 Rural Gardens
+1405 0 0 0 255 Urban Areas
+1406 255 22 1 255 Subtropical/Tropical Heavily Degraded Former Forest
+1700 255 255 255 255 Unknown
