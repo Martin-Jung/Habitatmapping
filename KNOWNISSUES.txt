@@ -1,0 +1,5 @@
+Known Issues:
+
+- There can be underestimates of pastoral land in South Africa, Brazil and East Asia due to the conservative pasture mask being used.
+
+- Some coastal cells might not be mapped from level 1 to level 2 because of non-existing combinations of input layers. 
