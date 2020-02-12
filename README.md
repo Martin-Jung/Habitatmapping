@@ -8,7 +8,7 @@ To run the code for creating the habitat type map an account on Google Earth Eng
 
 ## Suggested citation:
 
-Jung et al. XXX
+Jung, Martin, Raj Dahal, Prabhat, Butchart, Stuart H.M., Donald, Paul F., De Lamo,Xavier, Lesiv, Myroslava, Kapos, Valerie, Rondinini,Carlo & Visconti, Piero (submitted). 'A global map of terrestrial habitat types'
 
 <ZENODO>
 
