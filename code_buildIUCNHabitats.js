@@ -1,8 +1,8 @@
 /*
 This is the script for producing a global composite layer containing classes comparable
-to the IUCN habitat classification. 
+to the IUCN habitat classification.
 The idea is to do a two-step (Level 1, then Level 2) hierarchical mapping intersecting
-land cover, climatic and other layers (including land use). 
+land cover, climatic and other layers (including land use).
 The script has parameters that allow specifiying different masks. For using different input adaptions to the decision tree
 have to be made.
 It generates a number of output products - for each class - that can be individually exported
@@ -106,7 +106,7 @@ var resampleToCopernicus = function(image){
  var res = image.resample('bilinear').reproject({
     crs: copernicus.projection().crs(),
     scale: copernicus.projection().nominalScale()
-  }); 
+  });
   return(res);
 };
 
@@ -114,7 +114,7 @@ var resampleToCopernicus = function(image){
 print('Preparing input data');
 
 // Get ther elevation data from the SRTM mission
-var elevation = srtm.select('elevation'); 
+var elevation = srtm.select('elevation');
 var elev_products = ee.Terrain.products(elevation);
 
 // Now prepare global mountain mask
@@ -133,7 +133,7 @@ if(reduceToCop){iiasa_smallfields = resampleToCopernicus(iiasa_smallfields);}
 // Forest management layer
 var forestmanagement = FMlayer.rename('plantation');
 //11 – forest without any signs of human impact
-//20 - forest with signs of human impact, including clear cuts, logging, built-up roads. 
+//20 - forest with signs of human impact, including clear cuts, logging, built-up roads.
 //31 – replanted forest, forest with rotation period longer than 20 years
 //32 - woody plantations, rotation period of maximum 15 years
 //40 – oil palm plantations
@@ -150,7 +150,7 @@ if(calculate_pnv){
   var LC = copernicus; // Normal Copernicus layer
 }
 
-// Apply a focal_mode filter to the GLWD data to account for wall-wall uncertainties. 
+// Apply a focal_mode filter to the GLWD data to account for wall-wall uncertainties.
 // This will only affect the classes within the tenary statement
 glwd = glwd.focal_mode(5); // 5 Units
 if(reduceToCop){glwd = resampleToCopernicus(glwd);}
@@ -182,7 +182,7 @@ biomes = biomes.rename('biomes');
 //var subtropics = ee.Image.pixelLonLat().select('latitude').expression("b(0) >= -23.5 && b(0) <= 23.5").selfMask();
 var subtropics = biomes.addBands( ee.Image.pixelLonLat().select('latitude').expression("b(0) >= -23.5 && b(0) <= 23.5") ).expression('b(0) >= 1 && b(0) <= 3 || b(0) == 7 || b(1) == 1 ').selfMask();// Subtropics based on biomes
 // For Rural gardens we create a mask that convolves close to urban/rural areas
-var urban_boundary_ring = LC.expression("b(0) == 50").convolve(ee.Kernel.euclidean({radius:500,units:'meters'})).expression('b(0)>0');
+var urban_boundary_ring = LC.expression("b(0) == 50").convolve(ee.Kernel.euclidean({radius: 500,units:'meters'})).expression('b(0)>0');
 var urban_boundary = urban_boundary_ring.subtract( LC.expression("b(0) == 50") ).selfMask();
 if(reduceToCop){urban_boundary = resampleToCopernicus(urban_boundary)}
 
@@ -241,7 +241,7 @@ iucn_desert_lvl1 = iucn_desert_lvl1.expression(
     "((LC == 60 || LC == 100) && ( mountains <= 4 || slope > 8.75 ) ) ? 600" + // 6 Rocky Areas (e.g., inland cliffs, mountain peaks)
     ": (desert == 1 && ((koeppen >= 4 && koeppen <= 7) || koeppen >= 29)) ? 800" + // 800 Desert
     ": (koeppen == 29 || koeppen == 30) ? 800" + // Everything icy being a desert otherwise
-    ": 0 ",{ 
+    ": 0 ",{
       'desert': iucn_desert_lvl1.select('desert'),
       'LC': iucn_desert_lvl1.select('LC'),
       'mountains': iucn_desert_lvl1.select('mountains'),
@@ -252,7 +252,7 @@ iucn_desert_lvl1 = iucn_desert_lvl1.expression(
 // Mask out land area
 iucn_desert_lvl1 = iucn_desert_lvl1.selfMask();
 
-// ------- 
+// -------
 var iucn_desert_lvl2 = iucn_desert_lvl1.rename('desert');
 iucn_desert_lvl2 = iucn_desert_lvl2.addBands(koeppen).addBands(elev_products.select('elevation'));
 
@@ -262,7 +262,7 @@ iucn_desert_lvl2 = iucn_desert_lvl2.expression(
     ": (desert == 800 && (koeppen >= 5 && koeppen <= 6)) ? 802" + // 8.2. Desert – Temperate
     ": (desert == 800 && (koeppen == 7 || koeppen >= 29)) ? 803" + // 8.3. Desert – Cold
     ": (desert == 800) ? 800" +
-    ": 0 ",{ 
+    ": 0 ",{
       'desert': iucn_desert_lvl2.select('desert'),
       'elevation': iucn_desert_lvl2.select('elevation'),
       'koeppen': iucn_desert_lvl2.select('koeppen')
@@ -303,7 +303,7 @@ var iucn_artific = iucn_artific.expression(
 if(calculate_pnv){
   // No artifical land cover's in here, so empty image
   iucn_artific = ee.Image.constant(0).rename('artific');
-} else { 
+} else {
   iucn_artific = iucn_artific.unmask();
 }
 
@@ -316,9 +316,9 @@ iucn_forest_lvl1 = iucn_forest_lvl1.addBands(koeppen).addBands(treecovermask)
 .addBands(LC.rename('LC'));
 
 var iucn_forest_lvl1 = iucn_forest_lvl1.expression(
-    "(LC >= 111 && LC <= 116) ? 100" + // All closed forest 
-    ": (forest == 1 && treecovermask >= 50) ? 100" + // Forest 
-    ": 0",{ 
+    "(LC >= 111 && LC <= 116) ? 100" + // All closed forest
+    ": (forest == 1 && treecovermask >= 50) ? 100" + // Forest
+    ": 0",{
       'forest': iucn_forest_lvl1.select('forest'),
       'LC': iucn_forest_lvl1.select('LC'),
       'treecovermask': iucn_forest_lvl1.select('treecovermask'),
@@ -359,7 +359,7 @@ if(calculate_pnv){
 }
 
 var iucn_forest_lvl2 = iucn_forest_lvl2.expression(
-    "((forest == 100 && mountains == 1 && subtropics == 2) && ((koeppen >=1 && koeppen < 3) || ((koeppen == 12 || koeppen == 15) && elevation >= 1200 ) || ((koeppen >= 8 && koeppen <= 9) && biome == 3)) || ((biome == 10 || biome ==1) && (koeppen >= 9 && koeppen <= 10)  ) || ( (biome == 1 && koeppen >=22) || (biome == 10 && koeppen >=29)) ) ? 109" + // 1.9. Forest – Subtropical/tropical moist montane    
+    "((forest == 100 && mountains == 1 && subtropics == 2) && ((koeppen >=1 && koeppen < 3) || ((koeppen == 12 || koeppen == 15) && elevation >= 1200 ) || ((koeppen >= 8 && koeppen <= 9) && biome == 3)) || ((biome == 10 || biome ==1) && (koeppen >= 9 && koeppen <= 10)  ) || ( (biome == 1 && koeppen >=22) || (biome == 10 && koeppen >=29)) ) ? 109" + // 1.9. Forest – Subtropical/tropical moist montane
     ": (forest == 100 && mangroves == 1) ? 107" + // 1.7. Forest – Subtropical/tropical mangrove vegetation above high tide level
     ": (forest == 100 && swamp == 1) ? 108" + // 1.8. Forest – Subtropical/tropical swamp
     ": (forest == 100 && ((koeppen >= 1 && koeppen <= 2) || (koeppen == 11) || ( subtropics == 2 && (koeppen >= 12 && koeppen <= 15 )) || (subtropics == 2 && ((koeppen >= 8 && koeppen <= 9) && biome == 3)) ) ) ? 106" + // 1.6. Forest – Subtropical/tropical moist lowland
@@ -370,7 +370,7 @@ var iucn_forest_lvl2 = iucn_forest_lvl2.expression(
     ": (forest == 100 && (latitude > 45 && ((koeppen >= 27 && koeppen <= 29) || (koeppen >= 19 && koeppen <= 20) || (koeppen >= 23 && koeppen <= 24) || (biome == 6 && koeppen == 7) )) ) ? 101" + // 1.1. Forest – Boreal
     ": (forest == 100 && ((latitude < 0 && subtropics == 1) && (koeppen == 16 || (koeppen >= 29 && koeppen <= 30 )) ) ) ? 103" + // 1.3. Forest – Subantarctic
     ": (forest == 100) ? 100" + // Higher class. Identity unknown
-    ": 0",{ 
+    ": 0",{
       'forest': iucn_forest_lvl2.select('forest'),
       'LC': iucn_forest_lvl2.select('LC'),
       'biome' : iucn_forest_lvl2.select('biomes'),
@@ -397,7 +397,7 @@ var iucn_savanna_lvl1 = iucn_savanna_lvl1.expression(
     "((savanna == 1 && koeppen == 3) && treecovermask < 50 ) ? 200" + // Broad Savanna class
     ": (savanna == 1 && ((subtropics == 2 && (koeppen == 6 || koeppen == 11 || koeppen == 14)) && treecovermask < 50)) ? 200" + // Broad Savanna class
     ": (savanna == 1 && koeppen == 6 && treecovermask < 50) ? 200" + // Default Savanna
-    ": 0",{ 
+    ": 0",{
       'treecovermask' : iucn_savanna_lvl1.select('treecovermask'),
       'savanna': iucn_savanna_lvl1.select('savanna'),
       'biome': iucn_savanna_lvl1.select('biomes'),
@@ -414,11 +414,11 @@ iucn_savanna_lvl1 = iucn_savanna_lvl1.updateMask(iucn_artific.expression('(b(0) 
 // Level 2 savanna
 var iucn_savanna_lvl2 = iucn_savanna_lvl1.rename('savanna');
 iucn_savanna_lvl2 = iucn_savanna_lvl2.addBands(koeppen).addBands(biomes);
-  
+
 iucn_savanna_lvl2 = iucn_savanna_lvl2.expression(
     "(savanna == 200 && ((koeppen == 3 || koeppen == 4 || koeppen == 6) )   ) ? 201" + // 2.1. Savanna - Dry
     ": (savanna == 200 && ((koeppen == 11 || koeppen == 14) || ((koeppen == 3 || koeppen == 6) && biome == 9 ) ) ) ? 202" + // 2.2. Savanna - Moist
-    ": savanna == 200 ? 200" + 
+    ": savanna == 200 ? 200" +
     ": 0",{ // Default Savanna
       'savanna': iucn_savanna_lvl2.select('savanna'),
       'biome' : iucn_savanna_lvl2.select('biomes'),
@@ -436,7 +436,7 @@ iucn_shrub_lvl1 = iucn_shrub_lvl1.addBands(koeppen.rename('koeppen'))
 iucn_shrub_lvl1 = iucn_shrub_lvl1.expression(
   "(shrub == 1 && savanna == 0) ? 300" + // 3. Shrubland
   ": (shrub == 1 && treecovermask < 50) ? 300" +
-  ": 0",{ 
+  ": 0",{
     'treecovermask' : iucn_shrub_lvl1.select('treecovermask'),
     'savanna' : iucn_shrub_lvl1.select('savanna').unmask().expression("b(0) > 0"), // To remove savanna's
     'shrub': iucn_shrub_lvl1.select('shrub'),
@@ -447,7 +447,7 @@ iucn_shrub_lvl1 = iucn_shrub_lvl1.selfMask();
 // Map out anything that is artifical
 iucn_shrub_lvl1 = iucn_shrub_lvl1.updateMask(iucn_artific.expression('(b(0) == 0)'));
 
-// ------------------- 
+// -------------------
 var iucn_shrub_lvl2 = iucn_shrub_lvl1.rename('shrub');
 iucn_shrub_lvl2 = iucn_shrub_lvl2.addBands(koeppen.rename('koeppen'))
 .addBands(mountains).addBands(ee.Image.pixelLonLat())
@@ -465,7 +465,7 @@ var iucn_shrub_lvl2 = iucn_shrub_lvl2.expression(
     ": (shrub == 300 && ((koeppen >= 3 && koeppen <= 7) || (biome >= 2 && biome <= 3) || ( biome == 7 ) )  ) ? 305" + // 3.5. Shrubland – Subtropical/tropical dry
     ": (shrub == 300 && ((koeppen == 1 || koeppen == 2) || (koeppen >= 11 && koeppen <= 12) || ((koeppen >= 14 && koeppen <= 15) && subtropics == 2) ) ) ? 306" + // 3.6. Shrubland – Subtropical/tropical moist
     ": shrub == 300 ? 300" +  // Higher class
-    ": 0",{ 
+    ": 0",{
       'shrub': iucn_shrub_lvl2.select('shrub'),
       'biome' : iucn_shrub_lvl2.select('biomes'),
       'koeppen': iucn_shrub_lvl2.select('koeppen'),
@@ -492,7 +492,7 @@ iucn_grass_lvl1 = iucn_grass_lvl1.addBands(pasture)
 var iucn_grass_lvl1 = iucn_grass_lvl1.expression(
     "((grass == 1 && koeppen != 3) && pasture == 0) ? 400" + // Grassland
     ": ((LC == 60 || LC == 100) && desert == 0) ? 400" + // Alternative condition
-    ": 0",{ 
+    ": 0",{
       'grass': iucn_grass_lvl1.select('grass'),
       'koeppen': iucn_grass_lvl1.select('koeppen'),
       'desert': iucn_grass_lvl1.unmask().select('desert'),
@@ -505,7 +505,7 @@ iucn_grass_lvl1 = iucn_grass_lvl1.selfMask();
 iucn_grass_lvl1 = iucn_grass_lvl1.updateMask(iucn_artific.expression('(b(0) == 0)'));
 //Map.addLayer(iucn_grass_lvl1.randomVisualizer(),{},"Grassland lvl1");
 
-// --------------- 
+// ---------------
 var iucn_grass_lvl2 = iucn_grass_lvl1.rename('grass');
 iucn_grass_lvl2 = iucn_grass_lvl2.addBands(koeppen.rename('koeppen'))
 .addBands(mountains).addBands(ee.Image.pixelLonLat())
@@ -523,14 +523,14 @@ var iucn_grass_lvl2 = iucn_grass_lvl2.expression(
     ": ((grass == 400 && subtropics == 1) && ((koeppen >=8 && koeppen <= 10) || (koeppen >= 12 && koeppen <= 16) || (koeppen >= 17 && koeppen <= 18) || (koeppen >= 21 && koeppen <= 26) || ((koeppen >= 27 && (biome >= 4 && biome <= 5) || biome == 8 || biome == 10)) ) ) ? 404" + // 4.4. Grassland – Temperate
     ": (grass == 400 && ((koeppen >= 1 && koeppen <= 2) || (koeppen >= 11 && koeppen <= 12) || ((koeppen >= 14 && koeppen <= 15) && subtropics == 2) ) ) ? 406" + // 4.6. Grassland – Subtropical/tropical seasonally wet/flooded
     ": grass == 400 ? 400" + // Higher class
-    ": 0",{ 
+    ": 0",{
       'grass': iucn_grass_lvl2.select('grass'),
       'biome' : iucn_grass_lvl2.select('biomes'),
       'LC' : iucn_grass_lvl2.select('LC'),
       'koeppen': iucn_grass_lvl2.select('koeppen'),
       'mountains': iucn_grass_lvl2.select('mountains').expression('b(0) >= 1'),
       'elevation': iucn_grass_lvl2.select('elevation'),
-      'subtropics': iucn_grass_lvl2.select('subtropics'),      
+      'subtropics': iucn_grass_lvl2.select('subtropics'),
       'latitude': iucn_grass_lvl2.select('latitude')
 }).rename('comp');
 // Mask out land area
@@ -546,7 +546,7 @@ iucn_wetlands_lvl1 = iucn_wetlands_lvl1.addBands(glwd.rename('glwd'))
 iucn_wetlands_lvl1 = iucn_wetlands_lvl1.expression(
     "(wetlands == 1 && glwd == 1) ? 500" + // 5 Wetland areas
     ": (wetlands == 1) ? 500" + // Everything else that is wetland and has no trees
-    ": 0 ",{ 
+    ": 0 ",{
       'wetlands': iucn_wetlands_lvl1.select('wetlands'),
       'glwd': iucn_wetlands_lvl1.select('glwd').expression('b(0)>=1')
 }).rename('comp');
@@ -560,7 +560,7 @@ var iucn_wetlands_lvl2 = iucn_wetlands_lvl1.rename('wetlands')
 .addBands(koeppen.rename('koeppen')).addBands(LC.rename('LC'))
 .addBands(glwd.rename('glwd')).addBands(mountains.rename('mountains'));
 // https://www.worldwildlife.org/publications/global-lakes-and-wetlands-database-lakes-and-wetlands-grid-level-3
-// 1 Lake | 2 Reservoir | 3 River | 4 Freshwater Marsh, Floodplain | 5 Swamp Forest, Flooded Forest 
+// 1 Lake | 2 Reservoir | 3 River | 4 Freshwater Marsh, Floodplain | 5 Swamp Forest, Flooded Forest
 // 6 Coastal Wetland (incl. Mangrove, Estuary, Delta, Lagoon) | 7 Pan, Brackish/Saline Wetland | 8 Bog, Fen, Mire (Peatland)
 // 9 Intermittent Wetland/Lake | 10 50-100% Wetland | 11 25-50% Wetland | 12 Wetland Compex (0-25% Wetland)
 var iucn_wetlands_lvl2 = iucn_wetlands_lvl2.expression(
@@ -583,7 +583,7 @@ var iucn_wetlands_lvl2 = iucn_wetlands_lvl2.expression(
     // 5.17. Wetlands (inland) – Seasonal/intermittent saline, brackish or alkaline marshes/pools
     // 5.18. Wetlands (inland) – Karst and other subterranean hydrological systems (inland)
     ": wetlands == 500 ? 500" + // Default wetland
-    ": 0 ",{ 
+    ": 0 ",{
       'LC': iucn_wetlands_lvl2.select('LC'),
       'wetlands': iucn_wetlands_lvl2.select('wetlands'),
       'glwd': iucn_wetlands_lvl2.select('glwd'),
@@ -592,7 +592,7 @@ var iucn_wetlands_lvl2 = iucn_wetlands_lvl2.expression(
 }).rename('comp');
 // Mask out land area
 iucn_wetlands_lvl2 = iucn_wetlands_lvl2.selfMask();
-  
+
 // #################################################################### //
 // Compositing
 print('| Composite all layers together |');
@@ -654,23 +654,18 @@ print('Copernicus nominal scale:',LC.projection().nominalScale());
 // Export
 if(calculate_pnv){
   createOutput(comp,'iucn_habitatclassification_composite_pnv_lvl'+level+"_ver"+version);
-//  createOutput(missing,'iucn_habitatclassification_nonmissing_pnv_lvl'+level+"_ver"+version);
-//  createOutput(duplicates,'iucn_habitatclassification_duplicates_pnv_lvl'+level+"_ver"+version);
 } else {
   createOutput(comp,'iucn_habitatclassification_composite_lvl'+level+"_ver"+version);
-//  createOutput(missing,'iucn_habitatclassification_nonmissing_lvl'+level+"_ver"+version);
-//  createOutput(duplicates,'iucn_habitatclassification_duplicates_lvl'+level+"_ver"+version);
 }
-//createOutput(LC,'LC_reclass');
 
 // ------------------------------------------------------- //
 // Visualization options  for the colour map///
 // Define colours
-var colours_level2 = 
+var colours_level2 =
 '<RasterSymbolizer>' +
  '<ColorMap  type="intervals" extended="false" >' +
     '<ColorMapEntry color="#002de1" quantity="0" label="Water"/>' +
-    
+
     '<ColorMapEntry color="#0a941c" quantity="100" label="Forest"/>' +
     '<ColorMapEntry color="#115e4e" quantity="101" label="Forest - Boreal"/>' +
     '<ColorMapEntry color="#07a187" quantity="102" label="Forest - Subarctic"/>' +
@@ -681,11 +676,11 @@ var colours_level2 =
     '<ColorMapEntry color="#a0fecc" quantity="107" label="Forest - Subtropical-tropical mangrove vegetation"/>' +
     '<ColorMapEntry color="#677e2d" quantity="108" label="Forest - Subtropical-tropical swamp"/>' +
     '<ColorMapEntry color="#00c410" quantity="109" label="Forest - Subtropical-tropical moist montane"/>' +
-    
+
     '<ColorMapEntry color="#c6ff53" quantity="200" label="Savanna"/>' +
     '<ColorMapEntry color="#f5e936" quantity="201" label="Savanna - Dry"/>' +
     '<ColorMapEntry color="#cdff27" quantity="202" label="Savanna - Moist"/>' +
-    
+
     '<ColorMapEntry color="#eaa03f" quantity="300" label="Shrubland"/>' +
     '<ColorMapEntry color="#645800" quantity="301" label="Shrubland - Subarctic"/>' +
     '<ColorMapEntry color="#7b7a60" quantity="302" label="Shrubland - Subantarctic"/>' +
@@ -695,7 +690,7 @@ var colours_level2 =
     '<ColorMapEntry color="#f0a625" quantity="306" label="Shrubland - Subtropical-tropical moist"/>' +
     '<ColorMapEntry color="#ce9bc2" quantity="307" label="Shrubland - Subtropical-tropical high altitude"/>' +
     '<ColorMapEntry color="#7f1dd5" quantity="308" label="Shrubland - Mediterranean-type"/>' +
-    
+
     '<ColorMapEntry color="#98fae7" quantity="400" label="Grassland"/>' +
     '<ColorMapEntry color="#bdeed8" quantity="401" label="Grassland - Tundra"/>' +
     '<ColorMapEntry color="#adc4c0" quantity="402" label="Grassland - Subarctic"/>' +
@@ -704,7 +699,7 @@ var colours_level2 =
     '<ColorMapEntry color="#fff5cb" quantity="405" label="Grassland - Subtropical-tropical dry"/>' +
     '<ColorMapEntry color="#89e8f0" quantity="406" label="Grassland - Subtropical-tropical seasonally wet or flooded"/>' +
     '<ColorMapEntry color="#facbff" quantity="407" label="Grassland - Subtropical-tropical high altitude"/>' +
-    
+
     '<ColorMapEntry color="#5bb5ff" quantity="500" label="Wetlands (inland)"/>' +
     '<ColorMapEntry color="#00fafa" quantity="501" label="Wetlands (inland) - Permanent rivers streams creeks"/>' +
     '<ColorMapEntry color="#d6a0f9" quantity="502" label="Wetlands (inland) - Seasonal/intermittent/irregular rivers/streams/creeks"/>' +
@@ -742,10 +737,8 @@ var colours_level2 =
     '<ColorMapEntry color="#ffffff" quantity="1700" label="Unknown"/>' +
 
     '</ColorMap>' +
-'</RasterSymbolizer>';    
+'</RasterSymbolizer>';
 
 Map.addLayer(comp, {shown:false})
 Map.addLayer(comp.sldStyle(colours_level2), {}, "Level " + level);   // Redraw map
 //Map.addLayer(LC.randomVisualizer(),{},"Land cover");
-//Map.addLayer(missing.randomVisualizer(),{},"Missing");
- 
