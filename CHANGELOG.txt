@@ -1,3 +1,9 @@
+Version 002:
+- Updated plantation layer to newest estimates. Major improvements in SE-Asia and Russia particular
+- Used Improved Small field size from Lesiv et al.
+- In addition to GLWD now using HydroLAKES and the JRC Water seasonality product as additional ancillary data
+- Criteria for Rocky habitat (6.) adjusted, mapping overall less
+- Switched to Copernicus Land-cover asset available directly from GEE
 
 Version 001:
 - Initial Release
