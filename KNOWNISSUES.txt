@@ -2,6 +2,6 @@ Known Issues:
 
 - There can be underestimates of pastoral land in South Africa, Brazil and East Asia due to the conservative pasture mask being used.
 
-- Some coastal cells might not be mapped from level 1 to level 2 because of non-existing combinations of input layers. 
+- Some coastal cells might not be mapped from level 1 to level 2 owing to a lack of harmonizations between existing combinations of input layers. To be fixed in future versions
 
-- Owing to the scale of the Copernicus land cover and Global Lakes of the World (GLWD) data some rivers can be missed
+- Owing to the scale of the Copernicus land cover and Global Lakes of the World (GLWD) data some rivers can be missed and seasonal dynamics misclassified
