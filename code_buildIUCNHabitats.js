@@ -526,7 +526,7 @@ var iucn_grass_lvl2 = iucn_grass_lvl2.expression(
     ": (grass == 400 && ( (koeppen >= 19 && koeppen <= 20) || (koeppen >= 23 && koeppen <= 24) || ((koeppen >= 27 && koeppen <= 30) && (biome == 6 || biome == 11 || (biome == 13 && subtropics == 1)) || (biome == 6 && koeppen == 7) ) ) ) ? 401" + // 4.1. Grassland – Tundra
     ": (grass == 400 && ((latitude < 0 && subtropics == 1) && (koeppen == 16 || (koeppen >= 29 && koeppen <= 30 )) ) ) ? 403" + // 4.3. Grassland – Subantarctic
     ": (grass == 400 && (koeppen >= 3 && koeppen <= 5) || ( biome == 7 ) ) ? 405" + // 4.5. Grassland – Subtropical/tropical dry
-    ": ((grass == 400 && subtropics == 1) && ((koeppen >=8 && koeppen <= 10) || (koeppen >= 12 && koeppen <= 16) || (koeppen >= 17 && koeppen <= 18) || (koeppen >= 21 && koeppen <= 26) || ((koeppen >= 27 && (biome >= 4 && biome <= 5) || biome == 8 || biome == 10)) ) ) ? 404" + // 4.4. Grassland – Temperate
+    ": ((grass == 400 && subtropics == 1) && ((koeppen >=7 && koeppen <= 10) || (koeppen >= 12 && koeppen <= 16) || (koeppen >= 17 && koeppen <= 18) || (koeppen >= 21 && koeppen <= 26) || ((koeppen >= 27 && (biome >= 4 && biome <= 5) || biome == 8 || biome == 10)) ) ) ? 404" + // 4.4. Grassland – Temperate
     ": (grass == 400 && ((koeppen >= 1 && koeppen <= 2) || (koeppen >= 11 && koeppen <= 12) || ((koeppen >= 14 && koeppen <= 15) && subtropics == 2) ) ) ? 406" + // 4.6. Grassland – Subtropical/tropical seasonally wet/flooded
     ": grass == 400 ? 400" + // Higher class
     ": 0",{ 
