@@ -1,3 +1,7 @@
+Version 003:
+- Updated Koeppen climate zones (Beck et al.) and biomes layer with a region growth version (increase by 5km). This accounts for small mismatches between Copernicus land area near coastlines which previously resulted in lvl1 classes being mapped to lvl2.
+- Fixed remote sensing issues (stripes) in the Kaspian see that originated from Copernicus land cover.
+
 Version 002:
 - Updated plantation layer to newest estimates. Major improvements in SE-Asia and Russia particular
 - Used Improved Small field size from Lesiv et al.
