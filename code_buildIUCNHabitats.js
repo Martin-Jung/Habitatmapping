@@ -10,13 +10,14 @@ or in the end as overal composite layer.
 
 Scheme: https://www.iucnredlist.org/resources/habitat-classification-scheme
 Author: Martin Jung | Email: jung@iiasa.ac.at
-Citation: TBD
+License: CC-BY 4.0
+Citation: Martin Jung, Prabhat Raj Dahal, Stuart H. M. Butchart, Paul F. Donald, Xavier De Lamo, Myroslava Lesiv, … Piero Visconti. (2020). A global map of terrestrial habitat types (Version 002_v2) [Data set]. Zenodo. http://doi.org/10.5281/zenodo.3827110
 */
 
 // Parameters
 var level = 2; // Options 1 | 2 of the IUCN hierarchy
-var scale = 1000; // Output scale (1000 is recommended, 100 Copernicus, 250m for PNV)
-var output_path = 'naturemap'; // Google drive output folder
+var scale = 100; // Output scale (1000 is recommended, 100 Copernicus, 250m for PNV)
+var output_path = 'habitattypemap'; // Google drive output folder
 var toasset = false; // Should the map be exported to an asset or google drive?
 var reduceToCop = false; // Should the output be reduced to copernicus resolution?
 var pasture_mask = ['glwd','hyde','hoskins'][0]; // Use gridded livestock density of the world dataset, Hyde or Hoskins as pasture mask
@@ -27,7 +28,7 @@ var exportRegion = ee.Geometry.Rectangle([-180, -90, 180, 90], null, false); // 
 
 // -------------------------------------------------------------------- //
 // Input asset data (not all required) //
-var koeppen = ee.Image("users/Uploads/Beck_KG_V1_present_0p0083"); // Source: https://doi.org/10.1038/sdata.2018.214
+var koeppen = ee.Image("users/Uploads/beck_koeppenpresent_1km_expanded5km"); // Source: https://doi.org/10.1038/sdata.2018.214
 var srtm = ee.Image("CGIAR/SRTM90_V4"); // Google Earth Engine Asset
 var cifor_wetland = ee.Image("users/Uploads/TROP-SUBTROP_WetlandV2_2016_CIFOR"); // Source: https://doi.org/10.1111/gcb.13689
 var glwd = ee.Image("users/Uploads/GLWD_GlobalLakesWetlands"); // Source: https://doi.org/10.1016/j.jhydrol.2004.03.028
@@ -38,7 +39,7 @@ var iiasa_smallfields = ee.Image("users/Uploads/IIASA_smallfields"); // Source: 
 var k1 = ee.Image("users/Uploads/k1classes"); // Level 1 class from https://doi.org/10.1659/MRD-JOURNAL-D-17-00107.1
 var copernicus = ee.ImageCollection("COPERNICUS/Landcover/100m/Proba-V/Global").select('discrete_classification').max(); // Copernicus asset - Google Earth Engine Asset
 var treecover = ee.ImageCollection("COPERNICUS/Landcover/100m/Proba-V/Global").select('tree-coverfraction').max(); // Copernicus asset - Google Earth Engine Asset
-var biomes = ee.Image("users/Uploads/biomes_1km"); // Reclassified Google Earth Engine Asset
+var biomes = ee.Image("users/Uploads/biomes_1km_expanded5km"); // Reclassified Google Earth Engine Asset
 var biomecog = ee.FeatureCollection("RESOLVE/ECOREGIONS/2017"); // Google Earth Engine Asset
 var FMlayer = ee.Image("users/Uploads/naturemap_otherdata/fm_layer_v3_nozeros");
 //var FMlayer = ee.Image("users/Uploads/naturemap_otherdata/FMLayer_corrected"); // Forest management layer (yet unpublished)
@@ -46,6 +47,17 @@ var pasture = ee.Image("users/Uploads/naturemap_otherdata/PAS_1km_2005_0ice"); /
 var globallivestockdensity = ee.Image("users/Uploads/naturemap_otherdata/LifestockDensity_grazingonly_mask_Aw_LSU"); // Prepared mask, data from Source: http://dx.doi.org/10.1038/sdata.2018.227
 var hyde = ee.Image("users/Uploads/naturemap_otherdata/HYDEPasture2015_fraction"); // Source: https://doi.org/10.1007/s10584-011-0153-2
 var pnv = ee.Image("users/Uploads/habitattypes/pnv_potentiallandcover_probavlc100_c_250m_s00cm_2017_v05"); // Potential natural land cover (only available as variant)
+// Add Caspian sea fix //
+var kaspian_seafix_image = ee.Image().byte();
+kaspian_seafix_image = kaspian_seafix_image.paint({
+  featureCollection: kaspian_seafix,
+  color: 1
+});
+// Marine data
+var ocean_bedrock = ee.Image('NOAA/NGDC/ETOPO1').select('bedrock'); // Ocean bedrock
+// WCMC Coral reef data
+// Reference: UNEP-WCMC, WorldFish Centre, WRI, TNC (2010). Global distribution of warm-water coral reefs, compiled from multiple sources including the Millennium Coral Reef Mapping Project. Version 4.0. Includes contributions from IMaRS-USF and IRD (2005), IMaRS-USF (2005) and Spalding et al. (2001). Cambridge (UK): UNEP World Conservation Monitoring Centre. URL: http://data.unep-wcmc.org/datasets/1
+var coral_reefs = ee.FeatureCollection('users/Uploads/naturemap_otherdata/WCMC008_CoralReef2018_Py_v4').set('dummy',1);
 
 // -------------------------------------------------------------------- //
 // #################################################################### //
@@ -261,7 +273,6 @@ iucn_desert_lvl1 = iucn_desert_lvl1.selfMask();
 // ------- 
 var iucn_desert_lvl2 = iucn_desert_lvl1.rename('desert');
 iucn_desert_lvl2 = iucn_desert_lvl2.addBands(koeppen).addBands(elev_products.select('elevation'));
-
 iucn_desert_lvl2 = iucn_desert_lvl2.expression(
     "(desert == 600) ? 600" + // Rocky cliff
     ": (desert == 800 && koeppen == 4) ? 801" + // 8.1. Desert – Hot
@@ -458,11 +469,12 @@ var iucn_shrub_lvl2 = iucn_shrub_lvl1.rename('shrub');
 iucn_shrub_lvl2 = iucn_shrub_lvl2.addBands(koeppen.rename('koeppen'))
 .addBands(mountains).addBands(ee.Image.pixelLonLat())
 .addBands(biomes)
+.addBands(alpineBiomes.rename('alpine_abovetreelines')) // Alpine regions above the tree line
 .addBands(subtropics.unmask().add(1).rename("subtropics"))
 .addBands(elev_products.select('elevation'));
 
 var iucn_shrub_lvl2 = iucn_shrub_lvl2.expression(
-    "((shrub == 300 && mountains == 1 && subtropics == 2) && ((koeppen >=1 && koeppen < 3) || ((koeppen >= 9 && koeppen <= 12 || (koeppen == 15 || koeppen >= 29 ) || (biome == 10) || (biome == 1 && koeppen >=22) ) && elevation >= 1200 )) ) ? 307" + // 3.7. Shrubland – Subtropical/tropical high altitude
+    "( ((shrub == 300 && mountains == 1 && subtropics == 2) || (shrub == 300 && alpine_abovetreelines == 1 && subtropics == 2)) && ((koeppen >=1 && koeppen < 3) || ((koeppen >= 9 && koeppen <= 12 || (koeppen == 15 || koeppen >= 29 ) || (biome == 10) || (biome == 1 && koeppen >=22) ) && elevation >= 1200 )) ) ? 307" + // 3.7. Shrubland – Subtropical/tropical high altitude
     ": (shrub == 300 && ((koeppen >=8 && koeppen <= 10) && (subtropics == 1 && biome == 12)) ) ? 308" + // 3.8. Shrubland – Mediterranean-type shrubby vegetation
     ": ((shrub == 300 && subtropics == 1) && ((koeppen >=8 && koeppen <= 10) || (koeppen >= 12 && koeppen <= 19) || (koeppen >= 21 && koeppen <= 26) || (((biome >= 4 && biome <= 5) || biome == 8 || biome == 10 ) && koeppen >= 27) )) ? 304" + // 3.4. Shrubland – Temperate
     ": (shrub == 300 && (biome == 11 && koeppen == 30)) ? 301" + // 3.1. Shrubland – Subarctic
@@ -475,6 +487,7 @@ var iucn_shrub_lvl2 = iucn_shrub_lvl2.expression(
       'shrub': iucn_shrub_lvl2.select('shrub'),
       'biome' : iucn_shrub_lvl2.select('biomes'),
       'koeppen': iucn_shrub_lvl2.select('koeppen'),
+      'alpine_abovetreelines' : iucn_shrub_lvl2.select('alpine_abovetreelines').unmask(),
       'mountains': iucn_shrub_lvl2.select('mountains').expression('b(0) >= 1'),
       'elevation': iucn_shrub_lvl2.select('elevation'),
       'subtropics': iucn_shrub_lvl2.select('subtropics'),
@@ -517,11 +530,12 @@ iucn_grass_lvl2 = iucn_grass_lvl2.addBands(koeppen.rename('koeppen'))
 .addBands(mountains).addBands(ee.Image.pixelLonLat())
 .addBands(LC.rename("LC"))
 .addBands(biomes)
+.addBands(alpineBiomes.rename('alpine_abovetreelines')) // Alpine regions above the tree line
 .addBands(subtropics.unmask().add(1).rename("subtropics"))
 .addBands(elev_products.select('elevation'));
 
 var iucn_grass_lvl2 = iucn_grass_lvl2.expression(
-    "(grass == 400 && mountains == 1 && ((koeppen >= 1 && koeppen < 3) || ((koeppen == 11 || koeppen == 12 || koeppen == 15 || (koeppen >= 29 && subtropics == 2) || biome == 10 ) && elevation >= 1200 )) )? 407" + // 4.7. Grassland – Subtropical/tropical high altitude
+    "((grass == 400 && (alpine_abovetreelines == 1 || mountains == 1)) && ((koeppen >= 1 && koeppen < 3) || ((koeppen == 11 || koeppen == 12 || koeppen == 15 || (koeppen >= 29 && subtropics == 2) || biome == 10 ) && elevation >= 1200 )) )? 407" + // 4.7. Grassland – Subtropical/tropical high altitude
     ": ((grass == 400 || LC == 100) && (biome == 11 && koeppen == 30 ) ) ? 402" + // 4.2. Grassland – Subarctic
     ": (grass == 400 && ( (koeppen >= 19 && koeppen <= 20) || (koeppen >= 23 && koeppen <= 24) || ((koeppen >= 27 && koeppen <= 30) && (biome == 6 || biome == 11 || (biome == 13 && subtropics == 1)) || (biome == 6 && koeppen == 7) ) ) ) ? 401" + // 4.1. Grassland – Tundra
     ": (grass == 400 && ((latitude < 0 && subtropics == 1) && (koeppen == 16 || (koeppen >= 29 && koeppen <= 30 )) ) ) ? 403" + // 4.3. Grassland – Subantarctic
@@ -534,6 +548,7 @@ var iucn_grass_lvl2 = iucn_grass_lvl2.expression(
       'biome' : iucn_grass_lvl2.select('biomes'),
       'LC' : iucn_grass_lvl2.select('LC'),
       'koeppen': iucn_grass_lvl2.select('koeppen'),
+      'alpine_abovetreelines' : iucn_grass_lvl2.select('alpine_abovetreelines').unmask(),
       'mountains': iucn_grass_lvl2.select('mountains').expression('b(0) >= 1'),
       'elevation': iucn_grass_lvl2.select('elevation'),
       'subtropics': iucn_grass_lvl2.select('subtropics'),      
@@ -541,7 +556,7 @@ var iucn_grass_lvl2 = iucn_grass_lvl2.expression(
 }).rename('comp');
 // Mask out land area
 iucn_grass_lvl2 = iucn_grass_lvl2.selfMask();
-Map.addLayer(koeppen.randomVisualizer());
+
 // -------------  //
 print('Processing Wetlands - 5');
 // Level 1
@@ -601,7 +616,6 @@ var iucn_wetlands_lvl2 = iucn_wetlands_lvl2.expression(
 // Mask out land area
 iucn_wetlands_lvl2 = iucn_wetlands_lvl2.selfMask();
 
-
 // #################################################################### //
 // Compositing
 print('| Composite all layers together |');
@@ -653,9 +667,12 @@ var missing = comp.reduce(ee.Reducer.anyNonZero()).where(0,1);
 var duplicates = comp.reduce(ee.Reducer.countDistinct());
 // Composite to first class being mapped for a given level and clip
 comp = comp.reduce(ee.Reducer.firstNonNull()).selfMask();
-// Classes that only got mapped to level 1
-//var level1_only = comp.expression('(b(0) == 100) || (b(0) == 200) || (b(0) == 300) || (b(0) == 400)');
-//Map.addLayer(level1_only.randomVisualizer());
+// Caspian sea fix
+if(level == 1){
+  comp = comp.where(kaspian_seafix_image,ee.Image(500));
+} else {
+  comp = comp.where(kaspian_seafix_image,ee.Image(505));
+}
 
 // Nominal scale of the Copernicus layer
 print('Copernicus nominal scale:',LC.projection().nominalScale());
@@ -756,3 +773,4 @@ var colours_level2 =
 Map.addLayer(comp, {shown:false})
 Map.addLayer(comp.sldStyle(colours_level2), {}, "Level " + level);   // Redraw map
 //Map.addLayer(LC.randomVisualizer(),{},"Land cover");
+//Map.addLayer(missing.randomVisualizer(),{},"Missing");
