@@ -106,6 +106,7 @@ var intertidal = ee.Image("UQ/murray/Intertidal/v1_1/data_mask"); // Source:  Mu
 var iiasa_smallfields = ee.Image("users/Uploads/IIASA_smallfields"); // Source: https://onlinelibrary.wiley.com/doi/full/10.1111/gcb.14492
 var k1 = ee.Image("users/Uploads/k1classes"); // Level 1 class from https://doi.org/10.1659/MRD-JOURNAL-D-17-00107.1
 var copernicus = ee.ImageCollection("COPERNICUS/Landcover/100m/Proba-V/Global").select('discrete_classification').max(); // Copernicus asset - Google Earth Engine Asset
+var alpineBiomes = ee.Image('users/Uploads/naturemap_otherdata/AlpineShapes'); // Rasterized from https://onlinelibrary.wiley.com/doi/10.1111/ecog.05012
 var treecover = ee.ImageCollection("COPERNICUS/Landcover/100m/Proba-V/Global").select('tree-coverfraction').max(); // Copernicus asset - Google Earth Engine Asset
 var biomes = ee.Image("users/Uploads/biomes_1km_expanded5km"); // Reclassified Google Earth Engine Asset
 var biomecog = ee.FeatureCollection("RESOLVE/ECOREGIONS/2017"); // Google Earth Engine Asset
