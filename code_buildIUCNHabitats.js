@@ -110,8 +110,8 @@ var alpineBiomes = ee.Image('users/Uploads/naturemap_otherdata/AlpineShapes'); /
 var treecover = ee.ImageCollection("COPERNICUS/Landcover/100m/Proba-V/Global").select('tree-coverfraction').max(); // Copernicus asset - Google Earth Engine Asset
 var biomes = ee.Image("users/Uploads/biomes_1km_expanded5km"); // Reclassified Google Earth Engine Asset
 var biomecog = ee.FeatureCollection("RESOLVE/ECOREGIONS/2017"); // Google Earth Engine Asset
-var FMlayer = ee.Image("users/Uploads/naturemap_otherdata/fm_layer_v3_nozeros");
-//var FMlayer = ee.Image("users/Uploads/naturemap_otherdata/FMLayer_corrected"); // Forest management layer (yet unpublished)
+var FMlayer = ee.Image("users/Uploads/naturemap_otherdata/plantation_extent"); // Source: https://zenodo.org/record/3931930/
+//var FMlayer = ee.Image("users/Uploads/naturemap_otherdata/fm_layer_v3_nozeros");
 var pasture = ee.Image("users/Uploads/naturemap_otherdata/PAS_1km_2005_0ice"); // Source: https://doi.org/10.1002/ece3.2104
 var globallivestockdensity = ee.Image("users/Uploads/naturemap_otherdata/LifestockDensity_grazingonly_mask_Aw_LSU"); // Prepared mask, data from Source: http://dx.doi.org/10.1038/sdata.2018.227
 var hyde = ee.Image("users/Uploads/naturemap_otherdata/HYDEPasture2015_fraction"); // Source: https://doi.org/10.1007/s10584-011-0153-2
@@ -224,7 +224,7 @@ var forestmanagement = FMlayer.rename('plantation');
 //32 - woody plantations, rotation period of maximum 15 years
 //40 – oil palm plantations
 //53 – agroforestry, including fruit tree plantations, tree shelterbelts, individual trees on pastures
-forestmanagement = forestmanagement.expression('b(0) >= 31 && b(0) <= 53').rename('plantation');
+//forestmanagement = forestmanagement.expression('b(0) >= 31 && b(0) <= 53').rename('plantation');
 // No resampling necessary. Already at Copernicus resolution
 
 // Prepare the Land cover data
