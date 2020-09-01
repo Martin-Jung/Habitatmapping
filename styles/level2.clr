@@ -53,6 +53,25 @@
 801 255 183 1 255 Desert - Hot
 802 228 233 212 255 Desert - Temperate
 803 218 237 245 255 Desert - Cold
+900 198 230 236 255 Marine - Neritic
+901 209 236 247 255 Marine - Neritic Pelagic
+908 253 124 110 255 Marine - Coral Reefs
+909 134 164 117 255 Marine - Seagrass (submerged)
+1000 29 162 216 255 Marine - Oceanic
+1001 23 129 172 255 Marine - Epipelagic
+1002 14 81 108 255 Marine - Mesopelagic
+1003 8 48 64 255 Marine - Bathypelagic
+1004 2 16 21 255 Marine - Abyssopelagic
+1100 127 205 255 255 Marine - Deep Ocean Floor
+1101 17 153 209 255 Marine - Continental Slope/Bathyl zone
+1102 96 189 227 255 Marine - Abyssal Plain
+1103 26 145 194 255 Marine - Abyssal Mountains/Hills
+1104 2 116 149 255 Marine - Hadal/Deep Sea Trench
+1105 107 174 214 255 Marine - Seamounts
+1106 127 0 255 255 Marine - Deep Sea Vent
+1200 76 230 230 255 Marine - Intertidal
+1206 50 18 179 255 Marine - Tidepools
+1207 124 217 204 255 Marine - Mangroves submerged Roots
 1400 217 80 73 255 Artificial - Terrestrial
 1401 255 160 131 255 Arable land
 1402 255 131 202 255 Pastureland

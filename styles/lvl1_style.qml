@@ -1,18 +1,18 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis minScale="1e+8" styleCategories="AllStyleCategories" hasScaleBasedVisibilityFlag="0" version="3.4.14-Madeira" maxScale="0">
+<qgis maxScale="0" hasScaleBasedVisibilityFlag="0" styleCategories="AllStyleCategories" version="3.10.5-A Coruña" minScale="1e+8">
   <flags>
     <Identifiable>1</Identifiable>
     <Removable>1</Removable>
     <Searchable>1</Searchable>
   </flags>
   <customproperties>
-    <property value="false" key="WMSBackgroundLayer"/>
-    <property value="false" key="WMSPublishDataSourceUrl"/>
-    <property value="0" key="embeddedWidgets/count"/>
-    <property value="Value" key="identify/format"/>
+    <property key="WMSBackgroundLayer" value="false"/>
+    <property key="WMSPublishDataSourceUrl" value="false"/>
+    <property key="embeddedWidgets/count" value="0"/>
+    <property key="identify/format" value="Value"/>
   </customproperties>
   <pipe>
-    <rasterrenderer type="paletted" band="1" opacity="1" alphaBand="-1">
+    <rasterrenderer opacity="1" alphaBand="-1" type="paletted" band="1">
       <rasterTransparency/>
       <minMaxOrigin>
         <limits>None</limits>
@@ -23,21 +23,25 @@
         <stdDevFactor>2</stdDevFactor>
       </minMaxOrigin>
       <colorPalette>
-        <paletteEntry value="0" label="Water" color="#002de1" alpha="255"/>
-        <paletteEntry value="100" label="Forest" color="#0a941c" alpha="255"/>
-        <paletteEntry value="200" label="Savanna" color="#c6ff53" alpha="255"/>
-        <paletteEntry value="300" label="Shrubland" color="#eaa03f" alpha="255"/>
-        <paletteEntry value="400" label="Grassland" color="#98fae7" alpha="255"/>
-        <paletteEntry value="500" label="Wetlands (inland)" color="#5bb5ff" alpha="255"/>
-        <paletteEntry value="600" label="Rocky Areas" color="#a59283" alpha="255"/>
-        <paletteEntry value="800" label="Desert" color="#fffce1" alpha="255"/>
-        <paletteEntry value="1400" label="Artificial - Terrestrial" color="#d95049" alpha="255"/>
-        <paletteEntry value="1700" label="Unknown" color="#ffffff" alpha="255"/>
+        <paletteEntry value="0" alpha="255" color="#002de1" label="Water"/>
+        <paletteEntry value="100" alpha="255" color="#0a941c" label="Forest"/>
+        <paletteEntry value="200" alpha="255" color="#c6ff53" label="Savanna"/>
+        <paletteEntry value="300" alpha="255" color="#eaa03f" label="Shrubland"/>
+        <paletteEntry value="400" alpha="255" color="#98fae7" label="Grassland"/>
+        <paletteEntry value="500" alpha="255" color="#5bb5ff" label="Wetlands (inland)"/>
+        <paletteEntry value="600" alpha="255" color="#a59283" label="Rocky Areas"/>
+        <paletteEntry value="800" alpha="255" color="#fffce1" label="Desert"/>
+        <paletteEntry value="900" alpha="255" color="#c6e6ec" label="Marine - Neritic"/>
+        <paletteEntry value="1000" alpha="255" color="#1da2d8" label="Marine - Oceanic"/>
+        <paletteEntry value="1100" alpha="255" color="#7fcdff" label="Deep Ocean Floor"/>
+        <paletteEntry value="1200" alpha="255" color="#4ce6e6" label="Marine - Intertidal"/>
+        <paletteEntry value="1400" alpha="255" color="#d95049" label="Artificial - Terrestrial"/>
+        <paletteEntry value="1700" alpha="255" color="#ffffff" label="Unknown"/>
       </colorPalette>
-      <colorramp type="randomcolors" name="[source]"/>
+      <colorramp name="[source]" type="randomcolors"/>
     </rasterrenderer>
     <brightnesscontrast brightness="0" contrast="0"/>
-    <huesaturation colorizeStrength="100" colorizeBlue="128" colorizeOn="0" grayscaleMode="0" saturation="0" colorizeGreen="128" colorizeRed="255"/>
+    <huesaturation saturation="0" grayscaleMode="0" colorizeGreen="128" colorizeStrength="100" colorizeOn="0" colorizeRed="255" colorizeBlue="128"/>
     <rasterresampler maxOversampling="2"/>
   </pipe>
   <blendMode>0</blendMode>
