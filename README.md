@@ -8,12 +8,15 @@ To run the code for creating the habitat type map an account on Google Earth Eng
 
 If you want to suggest edits to the map, please use the issue functionality in github or directly fork the code and make a push request.
 
+## Online viewer
+
+The map can be interactively navigated [here](https://uploads.users.earthengine.app/view/habitat-types-map).
+
 ## Suggested citation:
 
-Jung, Martin, Raj Dahal, Prabhat, Butchart, Stuart H.M., Donald, Paul F., De Lamo,Xavier, Lesiv, Myroslava, Kapos, Valerie, Rondinini,Carlo & Visconti, Piero (in press) 'A global map of terrestrial habitat types' Nature - Scientific data
+Jung, M., Dahal, P.R., Butchart, S.H.M. et al. A global map of terrestrial habitat types. Sci Data 7, 256 (2020). https://doi.org/10.1038/s41597-020-00599-8
 
 Martin Jung, Prabhat Raj Dahal, Stuart H. M. Butchart, Paul F. Donald, Xavier De Lamo, Myroslava Lesiv, Valerie Kapos, Carlo Rondini & Piero Visconti. (2020). A global map of terrestrial habitat types (Version 003) [Data set]. Zenodo. http://doi.org/10.5281/zenodo.3925749
-
 
 ## Example screenshots
 
