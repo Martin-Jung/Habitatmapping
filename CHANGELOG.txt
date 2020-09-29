@@ -1,7 +1,41 @@
+_________________________________________________________________________
+Version 004:
+
+- Updated underlying Copernicus data to version V.3.0.1. See technical documents here https://zenodo.org/communities/copernicus-land-cover?page=1&size=20
+
+- Added changemasks for the years 2016-2019. The changemasks are exported at 100m as change in class (new class) and at 1km as change in fractional cover (before-after).
+
+- Added description for many IUCN Marine classes in 9.X Marine Neritic, 10.X Marine Oceanic, 11.X Marine Deep Ocean Floor and 12.X Marine Intertidal. Specifically the classes added were: 9. Marine Neritic, 9.1. Marine Neritic – Pelagic, 9.8. Marine Neritic – Coral Reef, 9.9 Seagrass (Submerged), 10 Marine Oceanic, 10.1 Epipelagic (0–200 m), 10.2 Mesopelagic (200–1,000 m), 10.3 Bathypelagic (1,000–4,000 m), 10.4 Abyssopelagic (4,000–6,000 m), 11 Marine Deep Ocean Floor (Benthic and Demersal), 11.1 Continental Slope/Bathyl Zone (200–4,000 m), 11.2 Abyssal Plain (4,000–6,000 m), 11.3 Abyssal Mountain/Hills (4,000–6,000 m), 11.4 Hadal/Deep Sea Trench (>6,000 m), 11.5 Seamount, 11.6 Deep Sea Vents (Rifts/Seeps), 12 Marine Intertidal, 12.6 Tidepools, 12.7 Mangrove Submerged Roots
+
+Used data sources:
+Amante, C. and B. W. Eakins, ETOPO1 1 Arc-Minute Global Relief Model: Procedures, Data Sources and Analysis. NOAA Technical Memorandum NESDIS NGDC-24, 19 pp, March 2009.
+
+Becker, J. J., Sandwell, D. T., Smith, W. H. F., Braud, J., Binder, B., Depner, J. L., ... & Ladner, R. (2009). Global bathymetry and elevation data at 30 arc seconds resolution: SRTM30_PLUS. Marine Geodesy, 32(4), 355-371.
+
+Harris, P. T., Macmillan-Lawler, M., Rupp, J., & Baker, E. K. (2014). Geomorphology of the oceans. Marine Geology, 352, 4-24.
+Burke, L., Reytar, K., Spalding, M., & Perry, A. (2011). Reefs at risk revisited. World Resources Institute. https://www.wri.org/publication/reefs-risk-revisited
+
+Jayathilake D.R.M., Costello M.J. (2018). A modelled global distribution of the seagrass biome. Biological Conservation. https://doi.org/10.1016/j.biocon.2018.07.009 https://data.unep-wcmc.org/datasets/46 
+
+Ramirez-Llodra, E. and M.C. Baker. (2006) Data on the location of hydrothermal vents. Biogeography of Chemosynthetic Ecosystems (ChEss) Project (www.noc.soton.ac.uk/chess). https://adaptwest.databasin.org/datasets/1c6af28887364008969f94c7e9df796e 
+
+Yesson, C., Clark, M. R., Taylor, M. L., & Rogers, A. D. (2011). The global distribution of seamounts based on 30 arc seconds bathymetry data. Deep Sea Research Part I: Oceanographic Research Papers, 58(4), 442-453. https://doi.pangaea.de/10.1594/PANGAEA.757564 
+
+- Marine Oceanic classes and the pelagic Neritic class (9.1) are __not__ mapped in the global composite map, but instead supplied separetely in the fractional exports
+
+- Changed data source for Mangrove class (Class 1.7) to Bunting et al. (2018) for the year 2015 to 2018. 
+Bunting P., Rosenqvist A., Lucas R., Rebelo L-M., Hilarides L., Thomas N., Hardy A., Itoh T., Shimada M. and Finlayson C.M. (2018). The Global Mangrove Watch – a New 2010 Global Baseline of Mangrove Extent. Remote Sensing 10(10): 1669. doi: 10.3390/rs1010669. https://data.unep-wcmc.org/datasets/45
+
+- Improved mapping of Mangrove classes around the globe, in part overriding the mapped Copernicus land cover class, for instance if Global Mangrove Watch identifies a Mangrove, but Copernicus indicates vegetation of only height shrubland
+
+- Changed mapping of moist savanna's, now mapping wetlands and moist savannas in the everglade and pantanal better.
+
+_________________________________________________________________________
 Version 003:
 - Updated Koeppen climate zones (Beck et al.) and biomes layer with a region growth version (increase by 5km). This accounts for small mismatches between Copernicus land area near coastlines which previously resulted in lvl1 classes being mapped to lvl2.
 - Fixed remote sensing issues (stripes) in the Kaspian see that originated from Copernicus land cover.
 
+_________________________________________________________________________
 Version 002:
 - Updated plantation layer to newest estimates. Major improvements in SE-Asia and Russia particular
 - Used Improved Small field size from Lesiv et al.
@@ -10,5 +44,6 @@ Version 002:
 - Criteria for Rocky habitat (6.) adjusted, mapping overall less
 - Switched to Copernicus Land-cover asset available directly from GEE
 
+_________________________________________________________________________
 Version 001:
 - Initial Release

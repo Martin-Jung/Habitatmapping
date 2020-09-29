@@ -1,7 +1,21 @@
-Known Issues:
+Known Issues as of version 004:
 
 - There can be underestimates of pastoral land in South Africa, Brazil and East Asia due to the conservative pasture mask being used.
 
-- Some coastal cells might not be mapped from level 1 to level 2 owing to a lack of harmonizations between existing combinations of input layers. To be fixed in future versions
+- Owing to the scale of the Copernicus land cover and Global Lakes of the World (GLWD) data some rivers can be missed and seasonal dynamics misclassified. 
 
-- Owing to the scale of the Copernicus land cover and Global Lakes of the World (GLWD) data some rivers can be missed and seasonal dynamics misclassified
+- Tidal wetlands still need to better distinguished from inland wetlands.
+
+- The Copernicus Land cover data has known artifacts (linear break) at the dateline (>180° - 0° Longitude) break.
+
+- Some errors can remain, particularly for the Copernicus Land cover data set. A list of known Limitations is given here on Page 142 (https://zenodo.org/record/3938968)
+
+- Between Copernicus v.2 and v.3 the grid cells shifted slightly in Longitude, therefore causing misalignement with the forest management layer.
+
+- The global potential seagrass layer is likely overestimated.
+
+- Land cover in the northern polar regions (Antarctica and Northpole) is a guess as the global Copernicus Land cover product does not extend that far (latitudinal range: -60 to 80). Therefore those areas are mapped as Desert / Icy Desert by default. Users interested in polar land cover are therefore encouraged to search for regional habitat and land cover products.
+
+- (Reported by Renato Augusto Ferreira de Lima) The Serra do Espinhaço range in Brazil which is mainly covered by exposed rocks and high altitude grasslands/shrublands, while the map currently indicates pasture. This will probably be fixed when better pasture data becomes available.
+
+- (Reported by Renato Augusto Ferreira de Lima) The upper Rio Negro region (Brazil, Coombia and Venezuela) is known by the occurrence of Campinaranas (similar to heat forests) over white-sand soils, ranging from grass lands to small forests. These habitats are currently not represented, probably because of fine-scale errors in Copernicus Land cover data.
