@@ -16,7 +16,7 @@ The map can be interactively navigated [here](https://uploads.users.earthengine.
 
 Jung, M., Dahal, P.R., Butchart, S.H.M. et al. A global map of terrestrial habitat types. Sci Data 7, 256 (2020). https://doi.org/10.1038/s41597-020-00599-8
 
-Martin Jung, Prabhat Raj Dahal, Stuart H. M. Butchart, Paul F. Donald, Xavier De Lamo, Myroslava Lesiv, Valerie Kapos, Carlo Rondini & Piero Visconti. (2020). A global map of terrestrial habitat types (Version 003) [Data set]. Zenodo. http://doi.org/10.5281/zenodo.3925749
+Martin Jung, Prabhat Raj Dahal, Stuart H. M. Butchart, Paul F. Donald, Xavier De Lamo, Myroslava Lesiv, Valerie Kapos, Carlo Rondini & Piero Visconti. (2020). A global map of terrestrial habitat types (Version 004) [Data set]. Zenodo. https://zenodo.org/record/4058819
 
 ## Example screenshots
 
